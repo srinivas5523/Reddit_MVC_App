@@ -1,0 +1,26 @@
+﻿@model RateLimit
+
+<table class="table table-striped">
+    <thead class="thead-light">
+        <tr>
+            <th scope="col">Ratelimit Used</th>
+            <th scope="col">Ratelimit Remaining </th>
+            <th scope="col">Ratelimit Reset</th>
+        </tr>
+    </thead>
+    
+
+    <tr>
+        <td>
+                @Model.RatelimitUsed
+        </td>
+        <td>
+                @Model.RatelimitRemaing
+        </td>   
+            <td>
+                @Model.RatelimitReset
+            </td>
+      
+        </tr>
+
+</table>

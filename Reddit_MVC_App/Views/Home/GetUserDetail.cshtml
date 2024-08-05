@@ -1,0 +1,29 @@
+﻿@model IEnumerable<AboutUserDet>
+ 
+<div class="form-group">
+    <label for="textbox1" class="fw-bold p-2 bg-secondary text-white">	Users with most posts </label>
+</div>
+<table class="table table-striped">
+<thead class="thead-light">
+    <tr>
+            <th scope="col"> Display Name</th>
+            <th scope="col">Title</th>
+            <th scope="col">Posts(Total Karma)</th>
+        </tr>
+</thead>
+    @foreach (var AboutUserDet in Model)
+{
+    <tr>
+        <td>
+                @Html.DisplayFor(modelItem => AboutUserDet.display_name)
+        </td>
+        <td>
+                @Html.DisplayFor(modelItem => AboutUserDet.title)
+        </td>   
+            <td>
+                @Html.DisplayFor(modelItem => AboutUserDet.total_karma)
+            </td>
+      
+        </tr>
+}
+</table>

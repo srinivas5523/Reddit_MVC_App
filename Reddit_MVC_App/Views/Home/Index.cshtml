@@ -1,0 +1,88 @@
+﻿@model Reddit_MVC_App.Models.DropdownViewModel
+@using Microsoft.AspNetCore.Http
+
+
+<for id="f1">
+    <div class="container col-md-12  form-group">
+        <div class="row">
+            <div class="col-md-12 form-group" id="ddlReddit">
+                <label for="textbox1" class="fw-bold p-2">Subreddit Category: </label>
+                @* @Html.DropDownList("RedditCategory", ViewBag.CategoryList as SelectList, new { @class = "dropdown", @onchange = "CallChangefunc(this.value)" }) *@
+                @Html.DropDownList("RedditCategory", ViewBag.CategoryList as SelectList, new { @class = "dropdown"})
+                <label for="textbox1" class="fw-bold p-2">Refresh Intervel</label>
+                 @Html.Hidden("hdnInter", null, new { @id = "hfInterval" }) 
+                @Html.DropDownList("Intervalselection", new List<SelectListItem>() { new SelectListItem { Text = "10", Value = "10" }, new SelectListItem { Text = "15", Value = "15" }, new SelectListItem { Text = "20", Value = "20" } }, new {@disabled = "disabled"})
+            </div>
+           
+            <div class="row ...">
+                &nbsp;
+            </div>
+             
+            <div id="partialViewResult" class="col-9 col-sm-6"></div>
+            <div id="partialViewUsrResult" class="col-9 col-sm-6"></div>
+          
+            </diV>
+           </div>
+    
+ 
+        <p>
+  <button class="btn btn-primary" type="button" id="btnRateLmt" data-bs-toggle="collapse" data-bs-target="#collapseWidthExample" aria-expanded="false" aria-controls="collapseWidthExample">
+    Clieck here to see the Rate Limit Details...
+  </button>
+</p>
+<div style="min-height: 120px;">
+  <div class="collapse collapse-horizontal" id="collapseWidthExample">
+    <div class="card card-body" style="width: 700px;">
+        <div class="row" id="partialrateLmt" class="col-9 col-sm-6"></div>
+    </div>
+  </div>
+</div>
+
+           </div>
+    
+         
+    @section Scripts
+    {
+        <script>
+            // Not using this function
+            function CallChangefunc(val) {
+                if (val != "0") {
+                    $("#partialViewResult").html('<span>Loading...</span>');
+                    // Once div element is completely load and then only load the Rate Limit Partial view 
+                    $("#partialViewResult").load("/Home/GetSubredditData/?CName=" + val, function () {
+                        $("#partialrateLmt").html('<span>Loading...</span>');
+                        $("#partialrateLmt").load("/Home/RateLmt/");
+                    });
+                }
+            }
+            var changeCallback = function(e) {
+  // chage logic
+              //  alert("ok");
+           }
+            $(document).ready(function () {
+               $("[id*=hfInterval]").val($("#Intervalselection option:selected").text());
+               const name = Number($("[id*=hfInterval]").val()*1000);
+                const IntSel = Number($("#Intervalselection option:selected").text()*1000);             
+                var selval= $("#RedditCategory option:selected").text();
+               var refreshId3 = setInterval(function() {
+               var selval= $("#RedditCategory option:selected").text();}, IntSel);               
+               var refreshId1 = setInterval(function(){$("#partialViewResult").html('<span>Loading...</span>');}, IntSel);
+               var refreshId2 = setInterval(function() {$("#partialViewResult").load("/Home/GetSubredditData/?CName=" + $("#RedditCategory option:selected").text());}, Number($("#Intervalselection option:selected").text()*1000));
+               var refreshId4 = setInterval(function() {$("#partialrateLmt").load("/Home/RateLmt/");});               
+               $("#partialViewResult").html('<span>Loading...</span>');
+               $("#partialViewResult").load("/Home/GetSubredditData/?CName=" + selval);
+               $("#partialViewUsrResult").html('<span>Loading...</span>');
+               
+               // Once div element is completely load and then only load the Rate Limit Partial view
+               $("#partialViewUsrResult").load("/Home/GetUserDetail/",function()
+               {
+                   $("#partialrateLmt").html('<span>Loading...</span>');
+                   $("#partialrateLmt").load("/Home/RateLmt/");
+                
+               });
+            });   
+
+        </script>
+    }
+
+</for>

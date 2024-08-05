@@ -1,0 +1,31 @@
+﻿@model SubredditListing
+
+<div class="col-md-6 form-group">
+    <label for="textbox1" class="fw-bold p-2 bg-secondary text-white">Posts with most up votes</label>
+    </div>
+<table class="table table-striped">
+    <thead class="thead-light">
+    <tr>
+            <th scope="col">Title </th>
+            <th scope="col">Author</th>
+            <th scope="col">UPS</th>
+    </tr>
+    </thead>
+    @foreach (var SubredditListing in Model.Data.Childern)
+    {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => SubredditListing.Data.Title)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => SubredditListing.Data.Author)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => SubredditListing.Data.UPS)
+            </td>
+        </tr>
+    }
+
+</table>
+
+
