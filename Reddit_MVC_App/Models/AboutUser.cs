@@ -2,7 +2,7 @@
 
 namespace Reddit_MVC_App.Models
 {
-    public class AboutUserDet
+    public class UserPostDetail
     {
 
         [JsonProperty("DisplayName")]

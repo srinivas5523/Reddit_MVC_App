@@ -7,9 +7,11 @@ namespace Reddit_MVC_App.Services
 
     public interface IHttpClientHelper
     {
-        string GetAsync(string requestUri , string _oAuthURL, string getAccessToken, string _clientId, string _clientSecret , string _subReddit, string _host, string _userAgent , string _Type, out RateLimit? _RateLimit);
-       
-        HttpClient HttpClient { get; set; }
+        
+        public string generateAuthToken(string clientId, string clientSecret, string requestUri, string host, string userAgent);
+
+        public string getRedittData(string accessToken, string requestUri, string userAgent, out RateLimit rateLimit);
+        public HttpClient HttpClient { get; set; }
 
     }
 

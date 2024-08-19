@@ -34,14 +34,16 @@ builder.Services.AddControllersWithViews();
 
 builder.Logging.ClearProviders();
 builder.Logging.AddConsole();
+builder.Services.AddHttpContextAccessor();
 builder.Services.AddScoped<IHttpClientHelper, HttpClientHelper>();
+builder.Services.AddScoped<IRedditService, RedditService>();
 builder.Services.AddSingleton<ILoggerManager, LoggerManager>();
 
 builder.Services.AddMvc()
     .AddSessionStateTempDataProvider();
-
 builder.Services.AddMemoryCache();
 builder.Services.AddSession();
+
 var app = builder.Build();
 
 
