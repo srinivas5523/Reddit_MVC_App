@@ -131,7 +131,7 @@ namespace Reddit_MVC_App.Controllers
                 _logger.LogError("GetUserDetail" + ex.Message);
             }
             return PartialView(userRespData);
-            //RateLmt();
+           
         }
 
         public ActionResult RateLmt()

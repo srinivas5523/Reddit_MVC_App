@@ -15,6 +15,14 @@ namespace Reddit_MVC_App.Services
     {
         RedditConfig myRedditConfig = new RedditConfig();
         private readonly ILoggerManager _logger;
+        private readonly IConfiguration _iconfig;
+
+        public HttpClientHelper(ILoggerManager logger, IConfiguration iconfig)
+        {
+            _logger = logger;
+            //_iconfig = iconfig;
+            
+        }
         public HttpClient HttpClient { get; set; }        
 
         public string generateAuthToken(string clientId, string clientSecret, string requestUri, string host, string userAgent) 
@@ -38,10 +46,12 @@ namespace Reddit_MVC_App.Services
                         if (response.IsSuccessStatusCode)
                         {
                             _tokenResponse = response.Content.ReadAsStringAsync().Result;
+                            _logger.LogInfo("Token Gnerated");
                             
                         }
                         else
                         {
+                            _logger.LogError("generateAuthToken:StausCode: " + response.StatusCode);
                             throw new Exception($"Failed to retrieve access token. Status code: {response.StatusCode}");
                         }
                     }
@@ -88,10 +98,14 @@ namespace Reddit_MVC_App.Services
                             _rateLimit.RatelimitReset = response.Headers.GetValues("x-ratelimit-reset").FirstOrDefault();
 
                             rateLimit = _rateLimit;
+
+                            _logger.LogInfo("Received posts data");
                         }
                         else
                         {
+                            _logger.LogError("generateAuthToken:StausCode: " + response.StatusCode);
                             throw new Exception($"Failed to retrieve Reditt posts data. Status code: {response.StatusCode}");
+                           
                         }
                     }
 

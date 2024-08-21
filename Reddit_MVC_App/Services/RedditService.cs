@@ -6,7 +6,7 @@ using System.Threading.RateLimiting;
 using System.Xml.Linq;
 using System.Collections.Generic;
 using Microsoft.AspNetCore.Http;
-using Microsoft.Extensions.Caching.Memory;
+
 
 namespace Reddit_MVC_App.Services
 {
@@ -16,35 +16,25 @@ namespace Reddit_MVC_App.Services
 
         private readonly ILoggerManager _logger;
         private readonly IConfiguration _iconfig;
-        private readonly IHttpClientHelper _httpClientHelper;
-        private readonly IMemoryCache _memoryCache;
-
-
-        string _baseURL = Reddit_MVC_App.Models.RedditConfig._baseURL;
-        string _clientId = Reddit_MVC_App.Models.RedditConfig._clientId;
-        string _clientSecret = Reddit_MVC_App.Models.RedditConfig._clientSecret;
-        string _oAuthURL = Reddit_MVC_App.Models.RedditConfig._oAuthURL;
-        string _subReddit = Reddit_MVC_App.Models.RedditConfig._subReddit;
-        string _userAgent = Reddit_MVC_App.Models.RedditConfig._userAgent;
-        string _host = Reddit_MVC_App.Models.RedditConfig._host;
-        string _getAccessToken = Reddit_MVC_App.Models.RedditConfig._getAccessToken;
-        string _users = Reddit_MVC_App.Models.RedditConfig._users;
-        string _user = Reddit_MVC_App.Models.RedditConfig._user;
+        private readonly IHttpClientHelper _httpClientHelper;        
+        private string _baseURL, _clientId, _clientSecret, _oAuthURL, _subReddit, _userAgent, _host, _accessToken, _users, _user;
+       
 
         public RedditService( ILoggerManager logger, IConfiguration iconfig, IHttpClientHelper httpClientHelper )
         {
             _logger = logger;
-            //_iconfig = iconfig;
+            _iconfig = iconfig;
             this._httpClientHelper = httpClientHelper;
+            this.GetConfigData();
         }
-        
+       
         public string Authenticate() 
         {
             string _accessToken = string.Empty;
             try
             {
-                
-                string _requestURI = _baseURL + _getAccessToken;
+              
+                string _requestURI = _baseURL + this._accessToken;
 
                 _logger.LogInfo("Calling HTTPClient calss to get access token");
                 string _tokenResponse = _httpClientHelper.generateAuthToken(_clientId, _clientSecret, _requestURI, _host,_userAgent);
@@ -207,6 +197,31 @@ namespace Reddit_MVC_App.Services
 
             return _catList;
          }
+
+        private void GetConfigData()
+        {
+            try
+            {
+                _logger.LogInfo("Load Config data.");
+                _baseURL = _iconfig["RedditUrl:baseUrl"].ToString();
+                _clientId = _iconfig["Credentials:clientId"].ToString();
+                _clientSecret = _iconfig["Credentials:clientSecret"].ToString();
+                _oAuthURL = _iconfig["RedditUrl:oAuthUrl"].ToString();
+                _subReddit = _iconfig["subReddit"].ToString();
+                _userAgent = _iconfig["userAgent"].ToString(); ;
+                _host = _iconfig["RedditUrl:host"].ToString();
+                _accessToken = _iconfig["RedditUrl:tokenUrl"].ToString();
+                _users = _iconfig["RedditUrl:users"].ToString();
+                _user = _iconfig["user"].ToString();
+                _logger.LogInfo("Loaded Config data.");
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError("GetConfigData:" + ex.Message);
+                throw ex;
+            }
+
+        }
 
 
 
